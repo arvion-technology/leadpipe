@@ -1,0 +1,249 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="color-scheme" content="dark" />
+  <title>Leadpipe — pipeline, forecast and activity in one page</title>
+  <meta name="description" content="A lightweight CRM with a weighted forecast, stage probabilities and stale-deal detection. Runs entirely in the browser." />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' rx='7' fill='%230b0f1a'/><text x='16' y='22' font-family='sans-serif' font-size='16' font-weight='700' fill='%23f5c26b' text-anchor='middle'>L</text></svg>" />
+  <link rel="stylesheet" href="arvion.css" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="aurora"></div>
+  <div class="grid-lines"></div>
+
+  <div class="app shell">
+    <aside class="sidebar">
+      <a class="brand" href="#pipeline" style="padding:6px 8px 14px">
+        <span class="brand-mark">A</span>
+        <span>
+          <span class="brand-word">LEAD<b>PIPE</b></span>
+          <span class="brand-sub" style="display:block">by Arvion</span>
+        </span>
+      </a>
+
+      <div class="nav-label">Sell</div>
+      <a class="nav-item active" href="#pipeline" data-view="pipeline"><span class="nav-dot"></span>Pipeline</a>
+      <a class="nav-item" href="#forecast" data-view="forecast"><span class="nav-dot"></span>Forecast</a>
+      <a class="nav-item" href="#deals" data-view="deals"><span class="nav-dot"></span>Deals</a>
+      <a class="nav-item" href="#accounts" data-view="accounts"><span class="nav-dot"></span>Accounts &amp; contacts</a>
+      <a class="nav-item" href="#reports" data-view="reports"><span class="nav-dot"></span>Win / loss reports</a>
+
+      <div class="nav-label">Workspace</div>
+      <a class="nav-item" href="https://github.com/arvion-technology/leadpipe#readme" target="_blank" rel="noopener"><span class="nav-dot"></span>Documentation ↗</a>
+
+      <div style="flex:1"></div>
+      <div class="card flat pad-sm" style="margin-top:14px">
+        <div class="row" style="gap:8px">
+          <span class="badge green"><span class="dot pulse"></span>local only</span>
+          <span class="spacer"></span>
+          <span class="small muted mono">v1.0</span>
+        </div>
+        <p class="small muted" style="margin:8px 0 0">Synthetic pipeline<br />Nothing leaves the page</p>
+        <button class="btn sm ghost mt-2" id="reset-data" style="width:100%">Reset demo data</button>
+      </div>
+    </aside>
+
+    <div style="min-width:0">
+      <header class="topbar">
+        <div class="search" style="width:min(320px,36vw)">
+          <input class="input" id="global-search" placeholder="Search deals or companies…" aria-label="Search deals" />
+        </div>
+        <span class="spacer"></span>
+        <span class="badge" title="Demo date"><span class="dot pulse" style="color:var(--green)"></span><span class="mono" id="today">—</span></span>
+        <select class="select" id="owner-filter" style="width:170px" aria-label="Filter by owner"></select>
+        <div class="avatar" title="Demo workspace">AV</div>
+      </header>
+
+      <main class="main">
+        <!-- ============================================================ -->
+        <section data-view-panel="pipeline">
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Revenue workspace</div>
+              <h1>Pipeline</h1>
+              <p class="lede">Four open stages and the wins that closed in the last 60 days. Every value on this page is computed from the deal list, not from a snapshot.</p>
+            </div>
+            <span class="spacer"></span>
+            <div class="row">
+              <button class="btn sm" id="export-pipeline">Export CSV</button>
+              <button class="btn sm primary" id="open-forecast">Forecast →</button>
+            </div>
+          </div>
+
+          <div class="grid grid-4" id="pipeline-kpis" style="margin-bottom:12px"></div>
+
+          <div class="attention" id="attention"></div>
+
+          <div class="board-wrap">
+            <div class="board" id="board"></div>
+          </div>
+
+        </section>
+
+        <!-- ============================================================ -->
+        <section data-view-panel="forecast" hidden>
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Next five months</div>
+              <h1>Weighted forecast</h1>
+              <p class="lede">Committed is deals in Negotiation at full value. Weighted multiplies each open deal by its stage probability. Pipeline is the ceiling if everything closed.</p>
+            </div>
+            <span class="spacer"></span>
+            <div class="tabs" id="quota-tabs" role="tablist" aria-label="Quota">
+              <button class="tab" data-quota="120000" role="tab">$120k</button>
+              <button class="tab active" data-quota="180000" role="tab">$180k</button>
+              <button class="tab" data-quota="240000" role="tab">$240k</button>
+            </div>
+          </div>
+
+          <div class="grid grid-4" id="forecast-kpis" style="margin-bottom:16px"></div>
+
+          <div class="grid" style="grid-template-columns:minmax(0,1.9fr) minmax(0,1fr)">
+            <div class="card">
+              <div class="card-head">
+                <div><div class="card-title">Forecast by close month</div><div class="card-sub" id="forecast-sub">weighted vs committed</div></div>
+                <span class="spacer"></span>
+                <div class="legend"><span><i style="background:var(--gold)"></i>weighted</span><span><i style="background:var(--blue)"></i>committed</span></div>
+              </div>
+              <div id="forecast-chart"></div>
+              <div id="forecast-table" class="mt-2"></div>
+            </div>
+            <div class="col" style="gap:16px">
+              <div class="card">
+                <div class="card-head"><div class="card-title">Pipeline by stage</div></div>
+                <div id="stage-panel"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div class="card-title">Pipeline age</div><span class="spacer"></span><span class="small muted">open value</span></div>
+                <div id="aging-panel"></div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section data-view-panel="deals" hidden>
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">All records</div>
+              <h1>Deals</h1>
+              <p class="lede">Every deal, open or closed. Click a row to open the activity timeline and move it through the funnel.</p>
+            </div>
+            <span class="spacer"></span>
+            <span class="badge mono" id="deal-count">–</span>
+          </div>
+
+          <div class="card" style="margin-bottom:16px">
+            <div class="row wrap">
+              <div class="search" style="flex:1;min-width:220px"><input class="input" id="deal-search" placeholder="Filter by deal or company…" /></div>
+              <select class="select" id="deal-stage" style="width:160px" aria-label="Stage"></select>
+              <select class="select" id="deal-status" style="width:150px" aria-label="Status"></select>
+              <button class="btn sm" id="deal-clear">Clear</button>
+            </div>
+          </div>
+
+          <div class="card pad-sm" style="padding:0">
+            <div id="deal-table"></div>
+            <div class="row" style="padding:12px 14px;border-top:1px solid var(--line)">
+              <span class="small muted" id="deal-page-info">–</span>
+              <span class="spacer"></span>
+              <button class="btn sm" id="deal-prev">← Prev</button>
+              <button class="btn sm" id="deal-next">Next →</button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section data-view-panel="accounts" hidden>
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Book of business</div>
+              <h1>Accounts &amp; contacts</h1>
+              <p class="lede">Twelve companies, two contacts each. Open pipeline and the last touch are rolled up from the deal list.</p>
+            </div>
+          </div>
+
+          <div class="grid" style="grid-template-columns:minmax(0,1fr) minmax(0,1.15fr)">
+            <div class="card">
+              <div class="card-head"><div class="card-title">Companies</div><span class="spacer"></span><span class="small muted">open pipeline</span></div>
+              <div id="company-table"></div>
+            </div>
+            <div class="card">
+              <div class="card-head"><div class="card-title">Contacts</div><span class="spacer"></span><span class="small muted" id="contact-count">–</span></div>
+              <div id="contact-table"></div>
+            </div>
+          </div>
+
+          <div class="card mt-2">
+            <div class="card-head"><div class="card-title">Recent activity</div><span class="spacer"></span><span class="badge gold" id="activity-total">–</span></div>
+            <div id="activity-feed"></div>
+          </div>
+        </section>
+
+        <!-- ============================================================ -->
+        <section data-view-panel="reports" hidden>
+          <div class="page-head">
+            <div>
+              <div class="eyebrow">Last 180 days</div>
+              <h1>Win / loss</h1>
+              <p class="lede">Win rate by count and by value, why deals were lost, which sources convert, and how fast the team moves.</p>
+            </div>
+          </div>
+
+          <div class="grid grid-4" id="report-kpis" style="margin-bottom:16px"></div>
+
+          <div class="grid" style="grid-template-columns:minmax(0,1.6fr) minmax(0,1fr);margin-bottom:16px">
+            <div class="card">
+              <div class="card-head"><div class="card-title">Closed value</div><span class="spacer"></span><span class="small muted">won vs lost, 180 days</span></div>
+              <div class="row" style="gap:26px;justify-content:center">
+                <div id="winloss-donut"></div>
+                <div class="col" id="winloss-legend" style="gap:12px;font-size:13px"></div>
+              </div>
+              <div class="divider"></div>
+              <div class="card-head" style="margin-bottom:8px"><div class="card-title" style="font-size:13px">Owner leaderboard</div></div>
+              <div id="owner-table"></div>
+            </div>
+            <div class="col" style="gap:16px">
+              <div class="card">
+                <div class="card-head"><div class="card-title">Why deals were lost</div></div>
+                <div id="lost-reasons"></div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div class="card-title">Velocity</div></div>
+                <div id="velocity-panel"></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="card">
+            <div class="card-head"><div class="card-title">Source performance</div><span class="spacer"></span><span class="small muted">closed deals in window</span></div>
+            <div id="source-table"></div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <!-- deal drawer -->
+  <div class="drawer-backdrop" id="drawer-backdrop" hidden>
+    <aside class="drawer" role="dialog" aria-modal="true" aria-labelledby="drawer-title">
+      <div id="drawer-body"></div>
+    </aside>
+  </div>
+
+  <div class="demo-banner">
+    <span class="brand-mark" style="width:20px;height:20px;font-size:10px;border-radius:6px">A</span>
+    <span>Arvion Labs</span>
+    <span class="sep"></span>
+    <a href="https://arvion-technology.github.io/labs/">All projects</a>
+    <span class="sep"></span>
+    <a href="https://github.com/arvion-technology/leadpipe" target="_blank" rel="noopener">source</a>
+  </div>
+
+  <script src="arvion.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
