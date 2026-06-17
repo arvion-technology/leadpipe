@@ -1,0 +1,309 @@
+/* Leadpipe-specific layout. Tokens and components come from arvion.css. */
+
+.board-wrap { overflow-x: auto; padding-bottom: 4px; }
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(184px, 1fr));
+  gap: 10px;
+  align-items: start;
+}
+
+.stage-col {
+  background: linear-gradient(180deg, rgba(18, 24, 38, 0.65), rgba(11, 15, 26, 0.25));
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 10px;
+  min-height: 180px;
+}
+
+.stage-head {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  padding: 1px 2px 8px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 8px;
+}
+.stage-head .stage-name {
+  font: 600 11px/1 var(--font-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-2);
+}
+.stage-head .stage-count {
+  font: 600 10.5px/1 var(--font-sans);
+  color: var(--muted);
+  background: var(--surface-3);
+  border-radius: 99px;
+  padding: 3px 6px;
+}
+.stage-head .stage-sum {
+  margin-left: auto;
+  font: 600 11.5px/1 var(--font-mono);
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+}
+.stage-col[data-stage="won"] { border-color: var(--gold-line); }
+.stage-col[data-stage="won"] .stage-sum { color: var(--green); }
+
+.deal-card {
+  background: linear-gradient(180deg, var(--surface-2), var(--surface));
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  padding: 9px 10px 8px;
+  margin-bottom: 7px;
+  cursor: pointer;
+  transition: border-color 0.15s, transform 0.12s var(--ease), background 0.15s;
+}
+.deal-card:hover { border-color: var(--gold-line); transform: translateY(-1px); }
+.deal-card.is-stale { border-left: 2px solid var(--red); }
+.deal-card.is-won { border-left: 2px solid var(--green); }
+
+.deal-co {
+  font-size: 10.5px;
+  color: var(--muted);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-bottom: 3px;
+}
+.deal-name {
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  color: var(--text);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.deal-value {
+  font: 600 14px/1 var(--font-display);
+  color: var(--gold);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
+}
+.deal-card.is-won .deal-value { color: var(--green); }
+.deal-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10.5px;
+  color: var(--muted);
+  margin-top: 6px;
+  padding-top: 5px;
+  border-top: 1px dashed var(--line);
+}
+.flag { color: var(--red); font-weight: 600; }
+.deal-meta .flag { color: var(--red); font-weight: 600; }
+.deal-meta .flag.warn { color: var(--amber); }
+.deal-meta .flag.ok { color: var(--green); }
+
+.more-link {
+  display: block;
+  width: 100%;
+  text-align: center;
+  font-size: 11px;
+  color: var(--muted);
+  background: none;
+  border: 1px dashed var(--line-strong);
+  border-radius: 8px;
+  padding: 6px;
+  cursor: pointer;
+  font-family: var(--font-sans);
+}
+.more-link:hover { color: var(--gold); border-color: var(--gold-line); }
+
+/* compact two-line rows used by the quiet-deals and follow-up panels */
+.mini-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 2px;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+.mini-row:last-child { border-bottom: 0; }
+.mini-row:hover .mini-name { color: var(--gold); }
+.mini-name { font-size: 13px; font-weight: 500; color: var(--text-2); }
+.mini-sub { font-size: 11px; color: var(--muted); }
+
+/* forecast */
+#forecast-chart { min-height: 0; }
+.forecast-row {
+  display: grid;
+  grid-template-columns: 64px 1fr 1fr 1fr 92px;
+  gap: 10px;
+  align-items: center;
+  padding: 4px 2px;
+  border-bottom: 1px solid var(--line);
+  font-size: 11.5px;
+  font-variant-numeric: tabular-nums;
+}
+.forecast-row:last-child { border-bottom: 0; }
+.forecast-row.head {
+  font: 600 10px/1 var(--font-sans);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-bottom: 1px solid var(--line-strong);
+}
+.forecast-row .month { color: var(--text); font-weight: 600; }
+.forecast-row .money { color: var(--text-2); text-align: right; font-family: var(--font-mono); font-size: 11.5px; }
+.forecast-row .money.commit { color: #8fb4ff; }
+.forecast-row .money.weight { color: var(--gold); }
+.forecast-row .cover { text-align: right; }
+
+/* drawer */
+.drawer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: rgba(4, 7, 13, 0.62);
+  backdrop-filter: blur(3px);
+  display: flex;
+  justify-content: flex-end;
+}
+.drawer {
+  width: min(470px, 100%);
+  height: 100%;
+  overflow: auto;
+  background: var(--surface);
+  border-left: 1px solid var(--line-strong);
+  box-shadow: -30px 0 80px -40px #000;
+  padding: 22px 22px 40px;
+  animation: drawer-in 0.22s var(--ease);
+}
+@keyframes drawer-in { from { transform: translateX(30px); opacity: 0.4; } to { transform: none; opacity: 1; } }
+.drawer-head { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 6px; }
+.drawer h2 { margin: 0; font-size: 19px; line-height: 1.3; }
+.drawer .close { margin-left: auto; }
+
+.stage-rail {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 5px;
+  margin: 14px 0 4px;
+}
+.stage-pill {
+  border: 1px solid var(--line-strong);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 8px;
+  padding: 6px 4px;
+  font: 500 10.5px/1.2 var(--font-sans);
+  color: var(--muted);
+  cursor: pointer;
+  text-align: center;
+}
+.stage-pill:hover { color: var(--text); border-color: var(--gold-line); }
+.stage-pill.done { color: var(--text-2); background: var(--surface-2); }
+.stage-pill.current {
+  color: var(--gold);
+  border-color: var(--gold-line);
+  background: var(--gold-soft);
+  font-weight: 600;
+}
+
+.timeline { margin-top: 4px; }
+.tl-item {
+  position: relative;
+  padding: 0 0 14px 22px;
+  border-left: 1px solid var(--line);
+  margin-left: 5px;
+}
+.tl-item:last-child { border-left-color: transparent; padding-bottom: 0; }
+.tl-dot {
+  position: absolute;
+  left: -4.5px;
+  top: 4px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--muted);
+  box-shadow: 0 0 0 3px var(--surface);
+}
+.tl-dot.call { background: var(--blue); }
+.tl-dot.meeting { background: var(--gold); }
+.tl-dot.proposal { background: var(--purple); }
+.tl-dot.email { background: var(--green); }
+.tl-dot.stage { background: var(--amber); }
+.tl-when { font: 500 10.5px/1.3 var(--font-mono); color: var(--muted); }
+.tl-what { font-size: 12.5px; color: var(--text-2); margin-top: 3px; }
+
+.log-form { display: flex; gap: 8px; margin-top: 12px; }
+.log-form .select { width: 110px; flex: none; }
+.log-form .input { flex: 1; }
+
+/* activity feed on the accounts page */
+.feed-row {
+  display: grid;
+  grid-template-columns: 118px 92px minmax(0, 1fr) 140px;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 2px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+}
+.feed-row:last-child { border-bottom: 0; }
+
+@media (max-width: 1080px) {
+  .board { grid-template-columns: repeat(5, 200px); }
+}
+
+.drawer-backdrop[hidden] { display: none; }
+
+/* attention strip above the board */
+.attention {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--red);
+  border-radius: var(--radius-sm);
+  background: rgba(248, 113, 113, 0.04);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.attn-label {
+  font: 600 10px/1 var(--font-sans);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--red);
+  flex: none;
+  margin-right: 2px;
+}
+.attn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 9px;
+  border-radius: 99px;
+  border: 1px solid var(--line-strong);
+  background: var(--surface-2);
+  font-size: 11px;
+  color: var(--text-2);
+  cursor: pointer;
+  flex: none;
+}
+.attn:hover { border-color: var(--gold-line); color: var(--text); }
+.attn .dot { width: 6px; height: 6px; }
+
+/* forecast table density */
+.forecast-row { padding: 4px 2px; }
+
+/* keep the KPI row compact so the board fits one screen */
+.grid-4 > .card { padding: 16px 18px; }
+.grid-4 .stat-value { font-size: 26px; }
+
+.health-panel {
+  margin-top: 14px;
+  padding: 12px 13px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: rgba(6, 9, 16, 0.35);
+}
