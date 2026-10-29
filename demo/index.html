@@ -4,7 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="color-scheme" content="light" />
-  <title>Leadpipe — pipeline, forecast and activity in one page</title>
+  <title>Leadpipe | pipeline, forecast and activity in one page</title>
   <meta name="description" content="A lightweight CRM with a weighted forecast, stage probabilities and stale-deal detection. Runs entirely in the browser." />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><path d='M50 9 L91 91 H73 L50 52 L27 91 H9 Z' fill='%23f5c26b'/><circle cx='50' cy='31' r='6.6' fill='%230b0f1a'/><path d='M50 52 L67 90 H33 Z' fill='%230b0f1a'/></svg>" />
   <link rel="stylesheet" href="arvion.css" />
@@ -52,7 +52,7 @@
           <input class="input" id="global-search" placeholder="Search deals or companies…" aria-label="Search deals" />
         </div>
         <span class="spacer"></span>
-        <span class="badge" title="Demo date"><span class="dot pulse" style="color:var(--green)"></span><span class="mono" id="today">—</span></span>
+        <span class="badge" title="Demo date"><span class="dot pulse" style="color:var(--green)"></span><span class="mono" id="today">, </span></span>
         <select class="select" id="owner-filter" style="width:170px" aria-label="Filter by owner"></select>
         <div class="avatar" title="Demo workspace">AV</div>
       </header>
@@ -133,7 +133,7 @@
               <p class="lede">Every deal, open or closed. Click a row to open the activity timeline and move it through the funnel.</p>
             </div>
             <span class="spacer"></span>
-            <span class="badge mono" id="deal-count">–</span>
+            <span class="badge mono" id="deal-count">, </span>
           </div>
 
           <div class="card" style="margin-bottom:16px">
@@ -148,7 +148,7 @@
           <div class="card pad-sm" style="padding:0">
             <div id="deal-table"></div>
             <div class="row" style="padding:12px 14px;border-top:1px solid var(--line)">
-              <span class="small muted" id="deal-page-info">–</span>
+              <span class="small muted" id="deal-page-info">, </span>
               <span class="spacer"></span>
               <button class="btn sm" id="deal-prev">← Prev</button>
               <button class="btn sm" id="deal-next">Next →</button>
@@ -172,13 +172,13 @@
               <div id="company-table"></div>
             </div>
             <div class="card">
-              <div class="card-head"><div class="card-title">Contacts</div><span class="spacer"></span><span class="small muted" id="contact-count">–</span></div>
+              <div class="card-head"><div class="card-title">Contacts</div><span class="spacer"></span><span class="small muted" id="contact-count">, </span></div>
               <div id="contact-table"></div>
             </div>
           </div>
 
           <div class="card mt-2">
-            <div class="card-head"><div class="card-title">Recent activity</div><span class="spacer"></span><span class="badge gold" id="activity-total">–</span></div>
+            <div class="card-head"><div class="card-title">Recent activity</div><span class="spacer"></span><span class="badge gold" id="activity-total">, </span></div>
             <div id="activity-feed"></div>
           </div>
         </section>

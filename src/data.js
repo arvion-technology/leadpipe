@@ -29,7 +29,7 @@ export const LOST_REASONS = [
   "Budget frozen",
   "Lost on price",
   "Chose a cheaper agency",
-  "No decision — project shelved",
+  "No decision, project shelved",
   "Timeline did not fit",
 ];
 
@@ -143,7 +143,7 @@ export function generatePipeline({ seed = 20261028, now = Date.now() } = {}) {
     const suffix = DEAL_SUFFIX[(i % 12 + Math.floor(i / 12)) % DEAL_SUFFIX.length];
     const base = {
       id: `D-${1000 + i}`,
-      name: `${company.name} — ${suffix}`,
+      name: `${company.name}, ${suffix}`,
       companyId: company.id,
       contactId: contact.id,
       ownerId: owner.id,

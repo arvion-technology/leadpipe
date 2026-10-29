@@ -2,7 +2,7 @@
  * Leadpipe forecast and pipeline maths.
  *
  * Pure functions over plain deal objects. Every function that depends on time
- * takes a `now` argument so a test can freeze the clock — the demo always
+ * takes a `now` argument so a test can freeze the clock, the demo always
  * passes Date.now().
  *
  * The two ideas worth reading here:
@@ -142,9 +142,9 @@ export function stageBreakdown(deals, { now = Date.now(), thresholds = {} } = {}
 /**
  * Monthly forecast, split three ways.
  *
- *   committed — deals in Negotiation, counted at full value
- *   weighted  — every open deal at its probability
- *   pipeline  — every open deal at full value (the ceiling)
+ *   committed, deals in Negotiation, counted at full value
+ *   weighted, every open deal at its probability
+ *   pipeline, every open deal at full value (the ceiling)
  *
  * Deals whose close date has already passed fall into the current month and
  * are flagged `overdue`, rather than disappearing from the forecast.
@@ -206,7 +206,7 @@ export function closedDeals(deals, { now = Date.now(), windowDays = 180 } = {}) 
 /**
  * Win rate, reasons and cycle time.
  *
- * Win rate is reported by count and by value — they can disagree by a lot when
+ * Win rate is reported by count and by value, they can disagree by a lot when
  * a team wins small deals and loses big ones, which is exactly what you want to
  * know before forecasting next quarter.
  */
@@ -257,7 +257,7 @@ export function winLoss(deals, { now = Date.now(), windowDays = 180 } = {}) {
 /**
  * Sales velocity: how much revenue the current pipeline produces per day.
  *   velocity = (open deals × average deal value × win rate) / average cycle days
- * It is a rate, not a forecast — it tells you whether the pipeline is big
+ * It is a rate, not a forecast, it tells you whether the pipeline is big
  * enough to hit quota, independent of close dates.
  */
 export function salesVelocity(deals, { now = Date.now(), windowDays = 180 } = {}) {

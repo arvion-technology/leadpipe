@@ -1,4 +1,4 @@
-// Leadpipe demo — rendering and interaction only.
+// Leadpipe demo, rendering and interaction only.
 // The pipeline maths lives in ../src/forecast.js and the dataset in
 // ../src/data.js; both are the same files the test suite imports.
 import {
@@ -43,10 +43,10 @@ function restore() {
 let data = restore();
 const persist = () => A.store.set(STORE_KEY, { deals: data.deals, activities: data.activities });
 
-const owner = (id) => data.owners.find((o) => o.id === id) ?? { name: "Unassigned", initials: "—", role: "" };
-const company = (id) => data.companies.find((c) => c.id === id) ?? { name: "—", sector: "—", employees: 0, country: "—" };
-const contact = (id) => data.contacts.find((c) => c.id === id) ?? { name: "—", title: "", email: "" };
-const dealLabel = (deal) => deal.name.split(" — ").slice(1).join(" — ") || deal.name;
+const owner = (id) => data.owners.find((o) => o.id === id) ?? { name: "Unassigned", initials: ", ", role: "" };
+const company = (id) => data.companies.find((c) => c.id === id) ?? { name: ", ", sector: ", ", employees: 0, country: ", " };
+const contact = (id) => data.contacts.find((c) => c.id === id) ?? { name: ", ", title: "", email: "" };
+const dealLabel = (deal) => deal.name.split(", ").slice(1).join(", ") || deal.name;
 const plural = (n, word) => `${n} ${word}${n === 1 ? "" : "s"}`;
 
 function scopedDeals() {
@@ -292,7 +292,7 @@ function renderDeals() {
       },
       {
         label: "Next step", align: "right",
-        render: (r) => r.status !== "open" ? el("span", { class: "small muted", text: "—" })
+        render: (r) => r.status !== "open" ? el("span", { class: "small muted", text: ", " })
           : el("span", { class: "small", text: r.nextStep ?? "none set" }),
       },
     ],
@@ -331,7 +331,7 @@ function renderAccounts() {
       { label: "Where", render: (r) => el("span", { class: "small muted", text: r.company.country }) },
       { label: "Open", align: "right", render: (r) => el("span", { class: "mono small", text: String(r.openCount) }) },
       { label: "Pipeline", align: "right", render: (r) => el("span", { class: "mono", text: moneyK(r.openValue) }) },
-      { label: "Last touch", align: "right", render: (r) => el("span", { class: "small muted", text: r.lastTouch ? fmt.relative(r.lastTouch) : "—" }) },
+      { label: "Last touch", align: "right", render: (r) => el("span", { class: "small muted", text: r.lastTouch ? fmt.relative(r.lastTouch) : ", " }) },
     ],
     rows,
   }));
@@ -360,7 +360,7 @@ function renderAccounts() {
       el("span", { class: "mono small muted", text: fmt.date(a.ts) }),
       el("span", { class: `badge ${a.type === "meeting" ? "gold" : a.type === "stage" ? "purple" : a.type === "call" ? "blue" : ""}`, text: a.type }),
       el("span", { class: "small", text: a.summary }),
-      el("span", { class: "small muted", style: "text-align:right", text: deal ? dealLabel(deal) : "—" }));
+      el("span", { class: "small muted", style: "text-align:right", text: deal ? dealLabel(deal) : ", " }));
   }));
 }
 
@@ -636,7 +636,7 @@ function askLost(id) {
           deal.lostReason = reason;
           deal.nextStep = null;
           deal.nextStepAt = null;
-          addActivity(deal, "stage", `Marked lost — ${reason}`);
+          addActivity(deal, "stage", `Marked lost, ${reason}`);
           afterMutation("Deal marked lost");
         },
       },

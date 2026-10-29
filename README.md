@@ -2,13 +2,13 @@
 <img src="docs/demo.gif" alt="Leadpipe pipeline board" width="100%" />
 </div>
 
-<sub>Recorded from the live demo — <a href="docs/demo.mp4">MP4</a> · <a href="docs/screenshot.png">static frame</a></sub>
+<sub>Recorded from the live demo, <a href="docs/demo.mp4">MP4</a> · <a href="docs/screenshot.png">static frame</a></sub>
 
 # Leadpipe
 
 A small CRM that answers three questions without a spreadsheet: what is in the
 pipeline, what is it likely worth, and which deals have gone quiet. The whole
-thing is a static page plus a few hundred lines of plain ES modules — no
+thing is a static page plus a few hundred lines of plain ES modules, no
 database, no server, no build step.
 
 [**Open the live demo**](https://arvion-technology.github.io/labs/demos/leadpipe/demo/) · [CI](https://github.com/arvion-technology/leadpipe/actions/workflows/ci.yml) · [MIT](LICENSE)
@@ -17,26 +17,26 @@ database, no server, no build step.
 
 Sales tools tend to grow a settings screen before they grow a forecast. This one
 is the opposite: the deal list is the only source of truth, and every number on
-screen — the weighted total, the monthly forecast, the win rate, the stale-deal
-count — is computed from that list when the page renders. The demo ships a
+screen, the weighted total, the monthly forecast, the win rate, the stale-deal
+count, is computed from that list when the page renders. The demo ships a
 synthetic pipeline of 60 deals, 12 companies and roughly 380 activities, seeded
 deterministically so the screenshots and the tests agree.
 
 The parts worth reading are in `src/forecast.js`: probability overrides,
-per-stage staleness limits and the commit / weighted / pipeline split — and in
+per-stage staleness limits and the commit / weighted / pipeline split, and in
 `src/scoring.js`, the five-signal deal health score shown in the drawer.
 
 ## What it does
 
-- **Pipeline** — four open stages plus a closed-won column, one card per deal
+- **Pipeline**: four open stages plus a closed-won column, one card per deal
   with value, owner and days in stage. Stale deals get a red edge.
-- **Attention strip** — the deals that have gone quiet past their stage's limit,
+- **Attention strip**: the deals that have gone quiet past their stage's limit,
   and follow-ups whose date has passed, one click from the activity timeline.
-- **Forecast** — committed, weighted and ceiling value for the next five months,
+- **Forecast**: committed, weighted and ceiling value for the next five months,
   a quota selector, and a chart of weighted against committed by close month.
-- **Deal drawer** — click any card to see a five-signal health score, the
+- **Deal drawer**: click any card to see a five-signal health score, the
   activity timeline, and move the deal, log a call, or mark it won or lost.
-- **Accounts, deals and reports** — a filterable deal table, company and contact
+- **Accounts, deals and reports**: a filterable deal table, company and contact
   rollups, win rate by count and by value, lost-reason breakdown and sales
   velocity.
 
@@ -66,7 +66,7 @@ Changes are kept in `localStorage` so a stage move survives a reload. There is a
 ```
 
 `demo/app.js` only renders and wires events. It never recomputes a formula by
-hand — if a number appears on screen, a function in `src/forecast.js` produced
+hand, if a number appears on screen, a function in `src/forecast.js` produced
 it, and that function has a test.
 
 A deal is a plain object:
@@ -74,7 +74,7 @@ A deal is a plain object:
 ```js
 {
   id: "D-1007",
-  name: "Himalayan Roasters — Warehouse dashboard",
+  name: "Himalayan Roasters, Warehouse dashboard",
   companyId: "c1", contactId: "p1", ownerId: "u1",
   value: 25500,
   stage: "lead",            // lead | qualified | proposal | negotiation
@@ -91,7 +91,7 @@ A deal is a plain object:
 
 ## How the forecast is calculated
 
-Each open stage carries a default probability — Lead 10%, Qualified 25%,
+Each open stage carries a default probability, Lead 10%, Qualified 25%,
 Proposal 50%, Negotiation 75%. A salesperson can override it per deal, because
 "this one is further along than the stage says" is real information. Closed deals
 resolve to 1 or 0 from their status, so a lost deal never inflates a forecast.
@@ -101,14 +101,14 @@ weighted(deal) = round(value × probability)
 ```
 
 Monthly buckets come from `closeDate`, not `createdAt`. A deal whose expected
-close date has already passed does not vanish — it lands in the current month and
+close date has already passed does not vanish, it lands in the current month and
 is counted as overdue, which is the difference between a forecast and a wish.
 
 The three columns mean different things:
 
-- **committed** — deals in Negotiation, at full value.
-- **weighted** — every open deal at its probability.
-- **pipeline** — every open deal at full value, the ceiling.
+- **committed**: deals in Negotiation, at full value.
+- **weighted**: every open deal at its probability.
+- **pipeline**: every open deal at full value, the ceiling.
 
 Staleness is per stage rather than global. Lead allows 7 quiet days, Qualified 10,
 Proposal 14, Negotiation 10. A deal with no touch in 24 days at the Lead stage is
@@ -171,7 +171,7 @@ node scripts/serve-check.mjs
 ## Limitations
 
 It is a demo, not a CRM you can hand to a sales team. There is no server, no
-authentication, no multi-user sync and no audit log — two people editing the same
+authentication, no multi-user sync and no audit log, two people editing the same
 pipeline would overwrite each other. Currency is hard-coded to USD and there is
 no per-deal currency conversion. The forecast has no seasonality and no historical
 snapshot, so it cannot show forecast-versus-actual accuracy over time; that would
